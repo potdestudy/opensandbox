@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://obniz.io/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/obniz@latest/obniz.js"></script>
+  </head>
+  <body>
+    <div id="obniz-debug"></div>
+    <img id="image" />
+    <strong id="here">Not online</strong>
+
+    <script>
+      var obniz = new Obniz("OBNIZ_ID_HERE");
+      obniz.onconnect = async function() {
+        $("#here").text("Online");
+        $("#text").text("You connect obniz. Please show obniz's display!");
+        obniz.display.clear(); // 一旦クリアする
+        obniz.display.print("Hello I`m obniz !");
+        //obniz.display.print("Hello I`m obniz !");
+        await obniz.wait(3000);
+      };
+      const onButtonClick = async () => {
+        //textbox To obniz
+        target = document.getElementById("output");
+        let sendtext = document.forms.id_form1.id_textBox1.value;
+        target.innerText = sendtext;
+        obniz.display.clear(); // 一旦クリアする
+        obniz.display.print(sendtext);
+        setInterval(() => {
+          ledonoff();
+        }, 2 * 1000);
+      };
+
+      const ledonoff = async () => {
+        //led on
+        var led = obniz.wired("LED", { anode: 0, cathode: 1 });
+        led.on();
+        await obniz.wait(1000);
+        led.off();
+      };
+    </script>
+    <h1 id="text"></h1>
+    You can send a message To obniz !
+    <form name="form1" id="id_form1" action="">
+      <input
+        name="textBox1"
+        id="id_textBox1"
+        type="text"
+        size="40"
+        maxlength="20"
+        value=""
+      />
+      <br />
+      <input
+        type="button"
+        value="Send Message To obniz."
+        onclick="onButtonClick();"
+      />
+    </form>
+    <strong>↓↓↓Output Result!↓↓↓</strong>
+    <div id="output"></div>
+  </body>
+</html>
